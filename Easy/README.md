@@ -1,1 +1,3 @@
 # myCodeevalSolutions
+
+Easy Challenges
