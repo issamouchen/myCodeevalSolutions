@@ -1,3 +1,5 @@
+#Mixed Content
+
  You have a string of words and digits divided by comma. Write a program which separates words with digits. You shouldn't change the order elements.
 Input sample:
 
