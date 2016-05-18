@@ -15,9 +15,16 @@ From 66 to 100: 'The Golden Years'
 If the age of the person less than 0 or more than 100 - it might be an alien - print: "This program is for humans"
 Input sample:
 
+0
+
+19
 
 Your program should accept as its first argument a path to a filename. Each line of input contains one integer - age of the person:
 
 Output sample:
-
+ 
 For each line of input print out where the person is:
+
+Still in Mama's arms
+
+College
