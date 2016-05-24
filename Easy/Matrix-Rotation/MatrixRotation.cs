@@ -1,36 +1,104 @@
-#Matrix Rotation
+ using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
 
- You are given a 2D N×N matrix. Each element of the matrix is a letter: from ‘a’ to ‘z’. Your task is to rotate the matrix 90° clockwise:
+class Program
+{
+    static void Main(string[] args)
+    {
+        using (StreamReader reader = File.OpenText(args[0]))
+        while (!reader.EndOfStream)
+        {
+            string line = reader.ReadLine();
+            if (null == line)
+                continue;
+            // do something with line
+             int elementCount = line.Length - line.Count(c => c == ' ');
+                int n = (int)Math.Sqrt(elementCount);
+                Debug.Assert(n * n == elementCount, "matrix needs to be square");
+                
+                int elementIndex = 0;
+                char[,] matrix = new char[n, n];
+                for (int x = 0; x < n; x++)
+                {
+                    for (int y = 0; y < n; y++)
+                    {
+                        matrix[x, y] = line[elementIndex];
+                        elementIndex += 2;
+                    }
+                }
+RotateMatrixRight(matrix);
+                 StringBuilder sb = new StringBuilder(line.Length);
+                for (int x = 0; x < n; x++)
+                {
+                    for (int y = 0; y < n; y++)
+                    {
+                        sb.Append(matrix[x, y]);
+                        if (x != n - 1 || y != n - 1) { sb.Append(' '); }
+                    }
+                }
 
-a b c        g d a
-d e f  =>    h e b
-g h i        i f c
+                Console.WriteLine(sb.ToString());
+        }
+        
+    }
+    
+     static void RotateMatrixRight<T>(T[,] m)
+        {
+            Debug.Assert(m.GetLength(0) == m.GetLength(1), "Matrix needs to be square");
+            int n = m.GetLength(0);
+            int f = n / 2;       // floor
+            int c = (n + 1) / 2; // ceil
 
-Input sample:
+            for (int x = 0; x < f; x++)
+            {
+                for (int y = 0; y < c; y++)
+                {
+                    // Cyclic Roll
+                    T temp = m[x, y];
+                    m[x, y] = m[n - 1 - y, x];
+                    m[n - 1 - y, x] = m[n - 1 - x, n - 1 - y];
+                    m[n - 1 - x, n - 1 - y] = m[y, n - 1 - x];
+                    m[y, n - 1 - x] = temp;
+                }
+            }
+        }
 
-The first argument is a file that contains 2D N×N matrices, presented in a serialized form (starting from the upper-left element), one matrix per line. The elements of a matrix are separated by spaces.
+        static void RotateMatrixRightSlow<T>(T[,] m)
+        {
+            TransposeMatrix(m);
+            ReverseMatrixRows(m);
+        }
 
-For example:
+        static void TransposeMatrix<T>(T[,] m)
+        {
+            Debug.Assert(m.GetLength(0) == m.GetLength(1), "Matrix needs to be square");
+            int n = m.GetLength(0);
 
-a b c d
+            for (int x = 0; x < n - 1; x++) {
+                for (int y = x + 1; y < n; y++)
+                {
+                    T temp = m[x, y];
+                    m[x, y] = m[y, x];
+                    m[y, x] = temp;
+                }
+            }
+        }
 
-a b c d e f g h i j k l m n o p
-
-a b c d e f g h i
-
-Output sample:
-
-Print to stdout matrices rotated 90° clockwise in a serialized form (same as in the input sample).
-
-For example:
-
-c a d b
-
-m i e a n j f b o k g c p l h d
-
-g d a h e b i f c
-
-Constraints:
-
-    The N size of the matrix can be from 1 to 10
-    The number of test cases is 100
+        static void ReverseMatrixRows<T>(T[,] m)
+        {
+            Debug.Assert(m.GetLength(0) == m.GetLength(1), "Matrix needs to be square");
+            int n = m.GetLength(0);
+            for (int x = 0; x < n; x++)
+            {
+                for (int y = 0; y < n / 2; y++)
+                {
+                    T temp = m[x, y];
+                    m[x, y] = m[x, (n - 1) - y];
+                    m[x, (n - 1) - y] = temp;
+                }
+            }
+        }
+} 
